@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package>
+  <name>kittycam</name>
+  <version>0.0.0</version>
+  <description>KittyCam: play with your kitty over the web, with video summaries, lasers, and feeders</description>
+
+  <maintainer email="kaijenhsiao@gmail.com">Kaijen Hsiao</maintainer>
+  <license>BSD</license>
+  <author email="kaijenhsiao@gmail.com">Kaijen Hsiao</author> 
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <run_depend>rosbridge_server</run_depend>
+  <run_depend>mjpeg_server</run_depend>
+  <run_depend>usb_cam</run_depend>
+
+  <export>
+  </export>
+</package>
