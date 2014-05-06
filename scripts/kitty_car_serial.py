@@ -9,7 +9,7 @@ from serial import SerialException
 from std_msgs.msg import Empty
 
 def signal_handler(signal, frame):
-        sys.exit(0)
+    sys.exit(0)
 
 signal.signal(signal.SIGINT, signal_handler)
 signal.signal(signal.SIGTERM, signal_handler)
