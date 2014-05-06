@@ -15,7 +15,7 @@ def motion_score(frame_buffer, detection="bgs2", kernel_size=4):
   """
   score, _ = run_motion_detection(frame_buffer, detection, kernel_size)
 
-def run_motion_detection(frame_buffer, detection="bgs2", kernel_size=6):
+def run_motion_detection(frame_buffer, detection="bgs2", kernel_size=4):
   """
   Assign a score to the amount of motion detected and generate a foreground mask
   frame_buffer is a list of opencv images (at least 2) 
@@ -61,9 +61,8 @@ def optical_flow(frame_buffer):
   prev_frame = cv2.cvtColor(frame_buffer[-2],cv2.COLOR_BGR2GRAY)
   flow = cv2.calcOpticalFlowFarneback(prev_frame, new_frame, 0.5, 3, 15, 3, 5, 1.2, 0)
   mag, ang = cv2.cartToPolar(flow[...,0], flow[...,1])
-  _, thres = cv2.threshold(mag, 3.0, 1.0, cv2.THRESH_TOZERO)
-  fgmask32 = cv2.normalize(thres,None,0,255,cv2.NORM_MINMAX)
-  fgmask = cv2.convertScaleAbs(fgmask32)
+  _, thres = cv2.threshold(mag, 4.0, 255, cv2.THRESH_BINARY)
+  fgmask = cv2.convertScaleAbs(thres)
   return fgmask
 
 def background_subtract(frame_buffer, detection="bgs2"):
@@ -90,7 +89,7 @@ def background_subtract(frame_buffer, detection="bgs2"):
   return fgmask
 
 
-def create_color_img(frame_buffer, detection="bgs2", kernel_size=6):
+def create_color_img(frame_buffer, detection="bgs2", kernel_size=4):
   """
   Create a color image showing where the motion is
   frame_buffer is a list of opencv images (at least 2)
@@ -128,7 +127,7 @@ if __name__ == "__main__":
     if len(frame_buffer) < history:
       continue
 
-    #score = motion_score(frame_buffer, detection, 6)
+    #score = motion_score(frame_buffer, detection)
     #print "{0:.3f}".format(score)
 
     draw = create_color_img(frame_buffer, detection)
