@@ -1,0 +1,16 @@
+<launch>
+  <arg name="map_file" default="$(find kittycam)/maps/kaijen_floor_2_27_06.yaml"/>
+
+  <!-- Run the map server -->
+  <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
+
+  <!-- Run AMCL -->
+  <include file="$(find kittycam)/launch/includes/amcl.launch">
+     <arg name="initial_pose_x" value="0"/>
+     <arg name="initial_pose_y" value="0"/>
+     <arg name="initial_pose_a" value="0"/>
+  </include> 
+
+  <!-- Run Move Base -->
+  <include file="$(find kittycam)/launch/includes/move_base.launch"/>
+</launch>

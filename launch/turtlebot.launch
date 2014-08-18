@@ -1,0 +1,12 @@
+<launch> 
+
+  <!-- Launch the Kobuki base -->
+  <include file="$(find kittycam)/launch/includes/minimal.launch"/>
+
+  <!-- Launch the Asus/Kinect -->
+  <include file="$(find turtlebot_bringup)/launch/3dsensor.launch"/>
+
+  <!-- Launch joystick teleop -->
+  <include file="$(find turtlebot_teleop)/launch/logitech.launch"/>
+
+</launch>

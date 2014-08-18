@@ -1,0 +1,27 @@
+<launch>
+  <arg name="use_sonars" default="false"/>
+  <arg name="reactive" default="$(arg use_sonars)"/>
+  <arg name="use_astar" default="false"/>
+ 
+  <!-- Delete move base params to remove the empty robot footprint that gets generated and saved -->
+  <rosparam command="delete" ns="move_base" />
+
+  <include file="$(find turtlebot_navigation)/launch/includes/velocity_smoother.launch.xml"/>
+  <include file="$(find kittycam)/launch/includes/kobuki/safety_controller.launch.xml"/>
+
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+    <rosparam file="$(find kittycam)/config/nav_params/costmap_common_params.yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(find kittycam)/config/nav_params/costmap_common_params.yaml" command="load" ns="local_costmap" />
+    <rosparam if="$(arg use_sonars)" file="$(find kittycam)/config/nav_params/local_costmap_params_with_sonar.yaml" command="load" />
+    <rosparam if="$(arg use_sonars)" file="$(find kittycam)/config/nav_params/global_costmap_params_with_sonar.yaml" command="load" />
+    <rosparam unless="$(arg use_sonars)" file="$(find kittycam)/config/nav_params/local_costmap_params.yaml" command="load" />
+    <rosparam unless="$(arg use_sonars)" file="$(find kittycam)/config/nav_params/global_costmap_params.yaml" command="load" />
+    <rosparam file="$(find kittycam)/config/nav_params/base_local_planner_params.yaml" command="load" />
+    <rosparam file="$(find kittycam)/config/nav_params/recovery_behaviors.yaml" command="load" />
+    <rosparam if="$(arg use_astar)" file="$(find kittycam)/config/nav_params/move_base_astar.yaml" command="load"/>
+    <rosparam unless="$(arg use_astar)" file="$(find kittycam)/config/nav_params/move_base_params.yaml" command="load"/>
+    <remap unless="$(arg reactive)" from="cmd_vel" to="navigation_velocity_smoother/raw_cmd_vel"/>
+    <remap if="$(arg reactive)" from="cmd_vel" to="/navi_cmd_vel"/>    
+  </node>
+
+</launch>

@@ -1,0 +1,30 @@
+global_costmap:
+  global_frame: /map
+  robot_base_frame: /base_footprint
+  update_frequency: 2.0
+  publish_frequency: 1.0
+  static_map: true
+  transform_tolerance: 2.0
+#  always_send_full_costmap: true
+
+  inflation_layer: {cost_scaling_factor: 10.0, enabled: true, inflation_radius: 0.3, robot_radius: 0.22}
+  map_type: voxel
+  obstacle_layer:
+    inflation_radius: 0.3
+    clear_old: true 
+    max_obstacle_persistance: 2.0
+    bump: {clearing: false, data_type: PointCloud2, marking: true, max_obstacle_height: 1.0, 
+      min_obstacle_height: 0.0, topic: mobile_base/sensors/bumper_pointcloud, observation_persistence: 0.2}
+    observation_sources: scan bump
+    scan: {clearing: true, data_type: LaserScan, marking: true, max_obstacle_height: 1.0,
+      min_obstacle_height: 0.05, topic: /scan}
+    track_unknown_space: true
+  sonar_layer: {topic: /sonars, mark_threshold: 0.501, clear_threshold: 0.499, max_marking_range: 0.3, max_clearing_range: 3.0, reset_prior_for_marking: true}
+
+  plugins:
+    - {name: static_layer, type: 'costmap_2d::StaticLayer'}
+    - {name: obstacle_layer, type: 'costmap_2d::VoxelLayer'}
+#    - {name: sonar_layer, type: 'sonar_layer::SonarLayer'}
+    - {name: footprint_layer, type: 'costmap_2d::FootprintLayer'}
+    - {name: inflation_layer, type: 'costmap_2d::InflationLayer'}
+
